@@ -40,6 +40,7 @@
 <body>
 
 <div class="container" style="margin-top: 50px; max-width: 750px">
+    <div id="action_alert" title="Message"></div>
     <div class="panel panel-info ">
         <div class="panel-heading" align="center">Classes</div>
         <div class="panel-body">
@@ -106,9 +107,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" action="<?php echo base_url(); ?>controller/ClasseController.php">
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
+                <form method="post" id="form_addcours">
+                        <div class="form-group">
                             <label class="control-label">Matière</label>
                             <select class='selectpicker show-menu-arrow form-control' type="text" name="matiere" id="matiere">
                                 <option value="" > <?php echo "Sélectionner la matière";?> </option>
@@ -123,7 +123,7 @@
                             </select>
                             <span id="err_matiere" class="text-danger"></span>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group">
                             <label class="control-label">Professeur</label>
                             <select class='selectpicker show-menu-arrow form-control' type="text" name="professeur" id="professeur">
                                 <option value="" > <?php echo "Sélectionner le professeur";?> </option>
@@ -138,21 +138,15 @@
                             </select>
                             <span id="err_prof" class="text-danger"></span>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label class="control-label">Nombre d'heures</label>
-                            <input class="form-control" type="text" name="heure" id="heure" placeholder="Entrer le nombre d'heures"/>
-                            <span id="err_heure" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-md-6">
+
+                        <div class="form-group ">
                             <label class="control-label">Coefficient</label>
+                            <input class="form-control" type="hidden" name="classeid" id="classeid" />
                             <input class="form-control" type="text" name="coef" id="coef" placeholder="Entrer le coefficient"/>
                             <span id="err_coef" class="text-danger"></span>
                         </div>
-                    </div>
                     <div class="form-group">
-                        <input class="btn btn-success" type="submit" name="valider" value="Ajouter"/>
+                        <input class="btn btn-success" type="submit" id="addcours" name="addcours" value="Ajouter"/>
                     </div>
                 </form>
             </div>
@@ -207,9 +201,53 @@
         var lib = $(this).data('libcl');
 
         $("#reslibCl").text(lib);
+        $('#classeid').val(id);
 
         //tinyMCE.get('business_skill_content').setContent(content);
     });
+
+    $('#form_addcours').on('submit', function () {
+        event.preventDefault();
+        var mat = $('#matiere').val();
+        var coef = $('#coef').val();
+        var prof = $('#professeur').val();
+        var classe = $('#classeid').val();
+
+        //alert('Matiere : '+mat+' Coef : '+coef+' Prof : '+prof+' Classe : '+classe);
+        $.ajax({
+            url: "<?php echo base_url(); ?>controller/CoursController.php",
+            method: "POST",
+            data: {
+                mat : mat,
+                coef : coef,
+                prof : prof,
+                classe : classe
+            },
+            success: function(data) {
+                    $('#myaddModal').modal('hide');
+                    $('.modal-backdrop').remove();
+                    $('#action_alert').html('<center><div class="alert alert-success">Cours ajouté</div></center>');
+                    $("#action_alert").dialog({
+                        modal: true,
+                        open: function(event, ui){
+                            setTimeout("$('#action_alert').dialog('close')",3000);
+                        }
+                    });
+            },
+            error : function () {
+                $('#myaddModal').modal('hide');
+                $('.modal-backdrop').remove();
+                $('#action_alert').html('<center><div class="alert alert-danger">Erreur ajout</div></center>');
+                $("#action_alert").dialog({
+                    modal: true,
+                    open: function(event, ui){
+                        setTimeout("$('#action_alert').dialog('close')",3000);
+                    }
+                });
+            }
+        });
+    });
+
 
     $(document).on( "click", '.details_classe',function(e) {
         var id = $(this).data('id');

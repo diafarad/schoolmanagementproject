@@ -47,11 +47,12 @@
                     <th style="text-align: center">Genre</th>
                     <th style="text-align: center">Téléphone </th>
                     <th style="text-align: center">Action</th>
+                    <th style="text-align: center">Action</th>
                 </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <th colspan="8" style='text-align:center; font-weight: normal;'>Pas de correspondance</th>
+                        <th colspan="9" style='text-align:center; font-weight: normal;'>Pas de correspondance</th>
                     </tr>
                 </tbody>
                 <tfoot>
@@ -63,6 +64,7 @@
                     <th style="text-align: center">Lieu de Naiss</th>
                     <th style="text-align: center">Genre</th>
                     <th style="text-align: center">Téléphone </th>
+                    <th style="text-align: center">Action</th>
                     <th style="text-align: center">Action</th>
                 </tr>
                 </tfoot>
@@ -139,7 +141,86 @@
 </div>
 <!-- End of Modal for Edit button -->
 
+
+<!-- Modal for Edit button -->
+<div class="modal fade" id="mynoteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel" align="center">Notes de l'élève <span id="nom_eleve"></span></h4>
+                <center>
+                    <div class="form-inline">
+                        <label for="">Semestre</label>
+                        <select style="width: 35px; padding: 0 0 0 3px;" class='form-control' type="text" name="semestre" id="semestre">
+                            <option value="1" >1</option>
+                            <option value="2" >2</option>
+                        </select>
+                    </div>
+                    <input class="form-control matEl" type="hidden" name="matEl" readonly>
+                    <input class="form-control anNote" type="hidden" name="anNote" readonly>
+                    <input class="form-control classNote" type="hidden" name="classNote" readonly>
+                </center>
+            </div>
+            <div class="modal-body">
+                <center>
+                    <table id="resultNote" class="table table-bordered table-striped" style="width:auto; margin-bottom: 10px">
+                        <thead>
+                        <tr>
+                            <th style='text-align:center;'>Matière</th>
+                            <th style='text-align:center;'>Devoir</th>
+                            <th style='text-align:center;'>Examen</th>
+                            <th style='text-align:center;'>Coef.</th>
+                            <!--<th style='text-align:center;'>Moy.</th>
+                            <th style='text-align:center;'>Appréciation</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th style='text-align:center;'>Matière</th>
+                            <th style='text-align:center;'>Devoir</th>
+                            <th style='text-align:center;'>Examen</th>
+                            <th style='text-align:center;'>Coef.</th>
+                            <!--<th style='text-align:center;'>Moy.</th>
+                            <th style='text-align:center;'>Appréciation</th>-->
+                        </tr>
+                        </tfoot>
+                    </table>
+                    <form method="post" action="<?php echo base_url(); ?>view/bulletin/index.php">
+                        <input class="form-control matEl" type="hidden" name="matEl" readonly>
+                        <input class="form-control anNote" type="hidden" name="anNote" readonly>
+                        <input class="form-control classNote" type="hidden" name="classNote" readonly>
+                        <input class="form-control semNote" type="hidden" name="semNote" readonly>
+                        <button class="btn btn-info" type="submit"><img style="height: 20px; width: 20px" src="<?php echo base_url(); ?>public/image/icons8-impression-30.png" alt=""></button>
+                    </form>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Modal for Edit button -->
+
 <script>
+    $(document).on( "click", '#printNote',function(e) {
+        var mat = $(".matEl").val();
+        var classe = $(".classNote").val();
+        var annee = $(".anNote").val();
+        var sem = $("#semestre").val();
+
+        //alert(mat + ' '+ classe + ' '+ annee + ' ' + sem);
+
+        $.ajax({
+            url: "<?php echo base_url(); ?>view/bulletin/index.php?mat="+mat+"&cl="+classe+"&an="+annee+"&sem="+sem,
+            method: "GET",
+            success: function(data) {
+                console.log('Bulletin ok');
+            }
+        });
+
+    });
+
     $(document).on( "click", '.edit_button',function(e) {
         var mat = $(this).data('mat');
         var nom = $(this).data('nom');
@@ -165,6 +246,119 @@
         }
     });
 
+    $(document).on( "click", '.note_button',function(e) {
+        var mat = $(this).data('mat');
+        var nom = $(this).data('nom');
+        var prenom = $(this).data('prenom');
+        var classe = $(this).data('classe');
+        var annee = $(this).data('annee');
+        var sem = $("#semestre").val();
+
+        $("#nom_eleve").text(prenom + ' ' + nom);
+        $("#nom_eleve").val(prenom + ' ' + nom);
+        $(".matEl").val(mat);
+        $(".anNote").val(annee);
+        $(".classNote").val(classe);
+        $(".semNote").val(sem);
+
+        $('#resultNote > tbody').empty();
+        $.ajax({
+            url: "<?php echo base_url(); ?>controller/EleveController.php",
+            method: "POST",
+            data: {
+                anNote : annee,
+                clNote : classe,
+                semNote : sem,
+                matNote : mat
+            },
+            dataType: "json",
+            success: function(data) {
+                //alert(data);
+                if(data.length > 0){
+                    var len = data.length;
+                    for(var i=0; i<len; i++){
+                        var matiere = data[i].matiere;
+                        var devoir = data[i].devoir;
+                        var examen = data[i].examen;
+                        var coef = data[i].coef;
+                        var classe = $('#classe').val();
+                        var annee = $('#annee').val();
+
+                        var tr_str = "<tr>" +
+                            "<td align='center'>" + matiere + "</td>" +
+                            "<td align='center'>" + devoir + "</td>" +
+                            "<td align='center'>" + examen + "</td>" +
+                            "<td align='center'>" + coef + "</td>" +
+                            "</tr>";
+
+                        $("#resultNote tbody").append(tr_str);
+                    }
+                }
+                else {
+                    $('#resultNote').append("<tr><td colspan='8'><center>Pas de résultat disponible !</center></td></tr>");
+                }
+            },
+            error: function () {
+                alert("Pas bon");
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $('#semestre').change(function () {
+            $('#resultNote > tbody').empty();
+            var mat = $(".matEl").val();
+            var classe = $(".classNote").val();
+            var annee = $(".anNote").val();
+            var sem = $("#semestre").val();
+            $(".semNote").val(sem);
+
+            //$("#nom_eleve").val(prenom + ' ' + nom);
+            //alert(mat);
+
+            $('#resultNote > tbody').empty();
+            $.ajax({
+                url: "<?php echo base_url(); ?>controller/EleveController.php",
+                method: "POST",
+                data: {
+                    anNote : annee,
+                    clNote : classe,
+                    semNote : sem,
+                    matNote : mat
+                },
+                dataType: "json",
+                success: function(data) {
+                    //alert(data);
+                    if(data.length > 0){
+                        var len = data.length;
+                        for(var i=0; i<len; i++){
+                            var matiere = data[i].matiere;
+                            var devoir = data[i].devoir;
+                            var examen = data[i].examen;
+                            var coef = data[i].coef;
+                            var classe = $('#classe').val();
+                            var annee = $('#annee').val();
+
+                            var tr_str = "<tr>" +
+                                "<td align='center'>" + matiere + "</td>" +
+                                "<td align='center'>" + devoir + "</td>" +
+                                "<td align='center'>" + examen + "</td>" +
+                                "<td align='center'>" + coef + "</td>" +
+                                "</tr>";
+
+                            $("#resultNote tbody").append(tr_str);
+                        }
+                    }
+                    else {
+                        $('#resultNote').append("<tr><td colspan='8'><center>Pas de résultat disponible !</center></td></tr>");
+                    }
+                },
+                error: function () {
+                    alert("Pas bon");
+                }
+            });
+        });
+    });
 
     $(document).ready(function () {
         $('#classe').change(function () {
@@ -190,6 +384,8 @@
                            var mail = data[i].mail;
                            var tel = data[i].tel;
                            var genre = data[i].genre;
+                           var classe = $('#classe').val();
+                           var annee = $('#annee').val();
 
                            var tr_str = "<tr>" +
                                "<td align='center'>" + mat + "</td>" +
@@ -209,13 +405,20 @@
                                "data-tel='"+tel+"'" +
                                "data-genre='"+genre+"'" +
                                "data-mat='"+mat+"'>Éditer</button></td>" +
+                               "<td align='center'><button type='button' class='btn btn-info btn-xs note_button'" +
+                               "data-toggle='modal' data-target='#mynoteModal'" +
+                               "data-nom='"+nom+"'" +
+                               "data-prenom='"+prenom+"'" +
+                               "data-annee='"+annee+"'" +
+                               "data-classe='"+classe+"'" +
+                               "data-mat='"+mat+"'>Voir notes</button></td>" +
                                "</tr>";
 
                            $("#result tbody").append(tr_str);
                         }
                    }
                     else {
-                        $('#result').append("<tr><td colspan='8'><center>Pas de résultat disponible !</center></td></tr>");
+                        $('#result').append("<tr><td colspan='9'><center>Pas de résultat disponible !</center></td></tr>");
                     }
                 },
                 error: function () {

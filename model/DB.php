@@ -91,3 +91,49 @@
         }
         return $anneeAcad;
     }
+
+    function getSemestreEnCours() {
+    $mois = date('n');
+
+    $sem = 0;
+    switch($mois)
+    {
+        case 7:
+            $sem = 2;
+            break;
+        case 8:
+            $sem = 2;
+            break;
+        case 9:
+            $sem = 1;
+            break;
+        case 10:
+            $sem = 1;
+            break;
+        case 11:
+            $sem = 1;
+            break;
+        case 12:
+            $sem = 1;
+            break;
+        case 1:
+            $sem = 1;
+            break;
+        case 2:
+            $sem = 2;
+            break;
+        case 3:
+            $sem = 2;
+            break;
+        case 4:
+            $sem = 2;
+            break;
+        case 5:
+            $sem = 2;
+            break;
+        case 6:
+            $sem = 2;
+            break;
+    }
+    return $sem;
+}

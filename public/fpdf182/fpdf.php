@@ -624,20 +624,20 @@ function Cell($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=false, $link
 		if(!isset($this->CurrentFont))
 			$this->Error('No font has been set');
 		if($align=='R')
-			$dx = $w-$this->cMargin-$this->GetStringWidth($txt);
+			$dx = $w-$this->cMargin-$this->GetStringWidth(utf8_decode($txt));
 		elseif($align=='C')
-			$dx = ($w-$this->GetStringWidth($txt))/2;
+			$dx = ($w-$this->GetStringWidth(utf8_decode($txt)))/2;
 		else
 			$dx = $this->cMargin;
 		if($this->ColorFlag)
 			$s .= 'q '.$this->TextColor.' ';
-		$s .= sprintf('BT %.2F %.2F Td (%s) Tj ET',($this->x+$dx)*$k,($this->h-($this->y+.5*$h+.3*$this->FontSize))*$k,$this->_escape($txt));
+		$s .= sprintf('BT %.2F %.2F Td (%s) Tj ET',($this->x+$dx)*$k,($this->h-($this->y+.5*$h+.3*$this->FontSize))*$k,$this->_escape(utf8_decode($txt)));
 		if($this->underline)
-			$s .= ' '.$this->_dounderline($this->x+$dx,$this->y+.5*$h+.3*$this->FontSize,$txt);
+			$s .= ' '.$this->_dounderline($this->x+$dx,$this->y+.5*$h+.3*$this->FontSize,utf8_decode($txt));
 		if($this->ColorFlag)
 			$s .= ' Q';
 		if($link)
-			$this->Link($this->x+$dx,$this->y+.5*$h-.5*$this->FontSize,$this->GetStringWidth($txt),$this->FontSize,$link);
+			$this->Link($this->x+$dx,$this->y+.5*$h-.5*$this->FontSize,$this->GetStringWidth(utf8_decode($txt)),$this->FontSize,$link);
 	}
 	if($s)
 		$this->_out($s);

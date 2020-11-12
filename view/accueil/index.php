@@ -61,7 +61,7 @@
     <div class="row" style="margin-top:15px; margin-left: 160px;">
         <div class="column" style="margin-right:10px; background-color:#385723; color: #fff"><img style="float: right; margin-right: 7px; margin-top: 7px" src="<?php echo base_url(); ?>public/image/icons8-garçon-85.png"><?php echo '<h4 style=" margin-top: 30px; font-weight: bold; font-family: Calibri; font-size: 28px">763</h4>'; ?></div>
         <div class="column" style="margin-right:10px; background-color:#6f2fa0; color: #fff"><img style="float: right; margin-right: 7px; margin-top: 7px" src="<?php echo base_url(); ?>public/image/icons8-fille-85 (1).png"><?php echo '<h4 style=" margin-top: 30px; font-weight: bold; font-family: Calibri; font-size: 28px">987</h4>'; ?></div>
-        <div class="column" style="margin-right:10px; background-color:#1c83a3; color:#fff"><img style="float: right; margin-right: 7px; margin-top: 7px" src="<?php echo base_url(); ?>public/image/icons8-pièces-de-monnaie-85.png"><?php echo '<h4 style=" margin-top: 30px; font-weight: bold; font-family: Calibri; font-size: 28px">'.number_format(25800000, 0, ',', ' ').' FCFA</h4>'; ?></div>
+        <div class="column" style="margin-right:10px; background-color:#1c83a3; color:#fff"><img style="float: right; margin-right: 7px; margin-top: 7px" src="<?php echo base_url(); ?>public/image/icons8-pièces-de-monnaie-85.png"><?php echo '<h4 style=" margin-top: 30px; font-weight: bold; font-family: Calibri; font-size: 28px">'.number_format(10500000, 0, ',', ' ').' FCFA</h4>'; ?></div>
     </div>
     <div style="margin-left: 160px;" class="row">
         <div class="column" style="margin-right:10px; height: 45px; background-color: #60943b; color: #fff"><h4 style="margin-top: 2px">Effectif garçons</h4></div>

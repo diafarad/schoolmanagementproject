@@ -7,6 +7,7 @@ require_once "model/DB.php";
 require_once "model/ClasseDB.php";
 require_once "model/ProfesseurDB.php";
 require_once "model/MatiereDB.php";
+require_once "model/EvaluationDB.php";
 require_once "model/StatsDB.php";
 
 
@@ -43,6 +44,22 @@ if(isset($_GET['page']))
         case 'matiere':
             $matieres = listeMatiere();
             require_once "view/matiere/index.php";
+            break;
+        case 'note':
+            require_once "view/note/index.php";
+            break;
+        case 'evaluation':
+            $anneeencours = getAnneeEnCours();
+            $semestreencours = getSemestreEnCours();
+            $classes = listeClasse();
+            require_once "view/evaluation/index.php";
+            break;
+        case 'evalclasse':
+            $anneeencours = getAnneeEnCours();
+            $semestreencours = getSemestreEnCours();
+            $classe = $_GET['idcl'];
+            $evaluations = getEvaluationByClasse($classe,$anneeencours,$semestreencours);
+            require_once "view/evaluation/eval_classe.php";
             break;
         default:
             header("location:".base_url());

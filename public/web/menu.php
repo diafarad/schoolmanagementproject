@@ -111,10 +111,11 @@
                 <li><a href="<?php echo base_url().'?page=reinscription' ?>" style="font-weight: bold">Réinscription</a></li>
             </ul>
         </li>
-        <li class="deroulant"><a style="font-weight: bold">Élève&ensp;</a>
+        <li class="deroulant"><a style="font-weight: bold">Études&ensp;</a>
             <ul class="sous">
                 <li><a href="<?php echo base_url().'?page=eleve' ?>" style="font-weight: bold">Élève</a></li>
-                <li><a href="#" style="font-weight: bold">Notes</a></li>
+                <li><a href="<?php echo base_url().'?page=evaluation' ?>" style="font-weight: bold">Évaluation</a></li>
+                <li><a href="<?php echo base_url().'?page=note' ?>" style="font-weight: bold">Notes</a></li>
             </ul>
         </li>
         <li><a href="#" style="font-weight: bold">Statistiques</a></li>
