@@ -41,6 +41,7 @@
 
 <div class="container" style="margin-top: 50px">
     <div class="panel panel-info ">
+        <div id="info"></div>
         <div class="panel-heading" align="center">Listes des classes</div>
         <div class="panel-body">
             <button type="button" style="margin-bottom: 5px;" class="btn btn-primary" data-toggle="modal"
@@ -61,7 +62,7 @@
                 <tbody>
                     <?php
 
-                    if(isset($_GET['resultA']))
+                    /*if(isset($_GET['resultA']))
                     {
                         if($_GET['resultA'] == 1)
                         {
@@ -95,7 +96,7 @@
                         {
                             echo "<div class='alert alert-warning'> Erreur de code</div>";
                         }
-                    }
+                    }*/
 
                     while($result=mysqli_fetch_row($classes))
                     {
@@ -116,6 +117,7 @@
                                         data-libelle='$result[1]'
                                         data-niveau='$result[2]'
                                         data-montantins='$result[3]'
+                                        data-montantmens='$result[5]'
                                         data-serie='$result[4]'
                                         data-id='$result[0]'>
                                         Éditer
@@ -156,12 +158,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="exampleModalLabel" align="center">Nouvelle Classe</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" id="clok" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" action="<?php echo base_url(); ?>controller/ClasseController.php">
+                <form method="post" id="addClasse">
                     <div class="form-group">
                         <label class="control-label">Libellé</label>
                         <input class="form-control" type="text" name="lib" id="lib" placeholder="Entrer le libellé"/>
@@ -173,6 +175,10 @@
                     <div class="form-group">
                         <label class="control-label">Montant Inscription</label>
                         <input class="form-control" type="text" name="mont" id="mont" placeholder="Entrer le montant d'inscription"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Mensualité</label>
+                        <input class="form-control" type="text" name="mens" id="mens" placeholder="Entrer le montant de la mensualité"/>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Série</label>
@@ -192,27 +198,31 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" id="edok" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">Édition classe</h4>
             </div>
-            <form method="post" action="<?php echo base_url(); ?>controller/ClasseController.php">
+            <form method="post" id="editClasse">
                 <div class="modal-body">
                     <div class="form-group">
-                        <input class="form-control classe_id" type="hidden" name="id" required>
+                        <input class="form-control classe_id" type="hidden" name="edit_id" required>
                         <label class="control-label">Libellé</label>
-                        <input class="form-control classe_libelle" name="libelle" placeholder="Entrer le libellé" required>
+                        <input class="form-control classe_libelle" name="edit_libelle" placeholder="Entrer le libellé" required>
                     </div>
                     <div class="form-group">
                         <label for="heading">Niveau</label>
-                        <input class="form-control classe_niveau" type="text" name="niveau" required>
+                        <input class="form-control classe_niveau" type="text" name="edit_niveau" required>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Montant Inscription</label>
-                        <input class="form-control classe_montantIns" type="text" name="montantIns" placeholder="Entrer le montant d'inscrption" required>
+                        <input class="form-control classe_montantIns" type="text" name="edit_montantIns" placeholder="Entrer le montant d'inscrption" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Montant Mensualité</label>
+                        <input class="form-control classe_montantMens" type="text" name="edit_montantMens" placeholder="Entrer le montant de la mensualité" required>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Série</label>
-                        <input class="form-control classe_serie" name="serie" placeholder="Entrer la serie" required>
+                        <input class="form-control classe_serie" name="edit_serie" placeholder="Entrer la serie" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -294,19 +304,79 @@
 
 
 <script>
+    document.getElementById('info').style.display = 'none';
+    //$('#clok').click();
+    $('#addClasse').on('submit', function () {
+        event.preventDefault();
+        //var count_data = 0;
+        //alert($('#lib').val());
+        var form_data = $(this).serialize();
+        $.ajax({
+            url: "<?php echo base_url(); ?>controller/ClasseController.php",
+            method: "POST",
+            data: form_data,
+            success: function(data) {
+                $('#addClasse')[0].reset();
+                $('#clok').click();
+                //$('body').removeClass('modal-open');
+                //$('.modal-backdrop').remove();
+                document.getElementById('info').style.display = 'block';
+                $('#info').html(data);
+                window.setTimeout(function() {
+                    $(".alert").fadeTo(700, 0).slideUp(700, function(){
+                        $(this).remove();
+                    });
+                }, 2000);
+            },
+            error: function(data){
+                console.log('ERREUR : ' + data);
+            }
+        });
+    });
+
     $(document).on( "click", '.edit_button',function(e) {
         var id = $(this).data('id');
         var lib = $(this).data('libelle');
         var niveau = $(this).data('niveau');
         var montantIns = $(this).data('montantins');
+        var montantMens = $(this).data('montantmens');
         var serie = $(this).data('serie');
 
         $(".classe_id").val(id);
         $(".classe_libelle").val(lib);
         $(".classe_montantIns").val(montantIns);
+        $(".classe_montantMens").val(montantMens);
         $(".classe_niveau").val(niveau);
         $(".classe_serie").val(serie);
         //tinyMCE.get('business_skill_content').setContent(content);
+    });
+
+    $('#editClasse').on('submit', function () {
+        event.preventDefault();
+        //var count_data = 0;
+        //alert($('#lib').val());
+        var form_data = $(this).serialize();
+        $.ajax({
+            url: "<?php echo base_url(); ?>controller/ClasseController.php",
+            method: "POST",
+            data: form_data,
+            success: function(data) {
+                $('#editClasse')[0].reset();
+                $('#edok').click();
+                //$('body').removeClass('modal-open');
+                //$('.modal-backdrop').remove();
+                document.getElementById('info').style.display = 'block';
+                $('#info').html(data);
+                window.setTimeout(function() {
+                    $(".alert").fadeTo(700, 0).slideUp(700, function(){
+                        $(this).remove();
+                    });
+                }, 2000);
+            },
+            error: function(data){
+                console.log('ERREUR : ' + data);
+            }
+        });
     });
 
     $(document).on( "click", '.details_classe',function(e) {

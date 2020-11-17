@@ -49,8 +49,8 @@
 <body>
     <div style="margin-top: 50px; margin-left: 160px" class="separator"><h3 style="margin-top: 10px">Accueil</h3></div>
     <div style="margin-top: 30px; margin-left: 160px;" class="row">
-        <div class="column" style="margin-right:10px; background-color:#002060; color:#fff"><img style="float: right; margin-right: 7px; margin-top: 7px" src="<?php echo base_url(); ?>public/image/icons8-eleves-85.png"><?php echo '<h4 style=" margin-top: 30px; font-weight: bold; font-family: Calibri; font-size: 28px">'.number_format(1750, 0, ',', ' ').'</h4>'; ?></div>
-        <div class="column" style="margin-right:10px; background-color:#bf9000; color:#fff"><img style="float: right; margin-right: 7px; margin-top: 7px" src="<?php echo base_url(); ?>public/image/icons8-teacher-85.png"><?php echo '<h4 style=" margin-top: 30px; font-weight: bold; font-family: Calibri; font-size: 28px">35</h4>'; ?></div>
+        <div class="column" style="margin-right:10px; background-color:#002060; color:#fff"><img style="float: right; margin-right: 7px; margin-top: 7px" src="<?php echo base_url(); ?>public/image/icons8-eleves-85.png"><?php echo '<h4 style=" margin-top: 30px; font-weight: bold; font-family: Calibri; font-size: 28px">'.number_format($nbreEleves[0], 0, ',', ' ').'</h4>'; ?></div>
+        <div class="column" style="margin-right:10px; background-color:#bf9000; color:#fff"><img style="float: right; margin-right: 7px; margin-top: 7px" src="<?php echo base_url(); ?>public/image/icons8-teacher-85.png"><?php echo '<h4 style=" margin-top: 30px; font-weight: bold; font-family: Calibri; font-size: 28px">'.$nbreProfs[0].'</h4>'; ?></div>
         <div class="column" style="background-color:#843c0b; color: #fff"><img style="float: right; margin-right: 7px; margin-top: 7px" src="<?php echo base_url(); ?>public/image/icons8-salle-de-classe-85.png"><?php echo '<h4 style=" margin-top: 30px; font-weight: bold; font-family: Calibri; font-size: 28px">'.$nbreClasses[0].'</h4>'; ?></div>
     </div>
     <div style="margin-left: 160px;" class="row">
@@ -59,9 +59,9 @@
         <div class="column" style="margin-right:10px; height: 45px; background-color: #c45a11; color: #fff"><h4 style="margin-top: 2px">Nombre de classes</h4></div>
     </div>
     <div class="row" style="margin-top:15px; margin-left: 160px;">
-        <div class="column" style="margin-right:10px; background-color:#385723; color: #fff"><img style="float: right; margin-right: 7px; margin-top: 7px" src="<?php echo base_url(); ?>public/image/icons8-garçon-85.png"><?php echo '<h4 style=" margin-top: 30px; font-weight: bold; font-family: Calibri; font-size: 28px">763</h4>'; ?></div>
-        <div class="column" style="margin-right:10px; background-color:#6f2fa0; color: #fff"><img style="float: right; margin-right: 7px; margin-top: 7px" src="<?php echo base_url(); ?>public/image/icons8-fille-85 (1).png"><?php echo '<h4 style=" margin-top: 30px; font-weight: bold; font-family: Calibri; font-size: 28px">987</h4>'; ?></div>
-        <div class="column" style="margin-right:10px; background-color:#1c83a3; color:#fff"><img style="float: right; margin-right: 7px; margin-top: 7px" src="<?php echo base_url(); ?>public/image/icons8-pièces-de-monnaie-85.png"><?php echo '<h4 style=" margin-top: 30px; font-weight: bold; font-family: Calibri; font-size: 28px">'.number_format(10500000, 0, ',', ' ').' FCFA</h4>'; ?></div>
+        <div class="column" style="margin-right:10px; background-color:#385723; color: #fff"><img style="float: right; margin-right: 7px; margin-top: 7px" src="<?php echo base_url(); ?>public/image/icons8-garçon-85.png"><?php echo '<h4 style=" margin-top: 30px; font-weight: bold; font-family: Calibri; font-size: 28px">'.$nbreFilles[0].'</h4>'; ?></div>
+        <div class="column" style="margin-right:10px; background-color:#6f2fa0; color: #fff"><img style="float: right; margin-right: 7px; margin-top: 7px" src="<?php echo base_url(); ?>public/image/icons8-fille-85 (1).png"><?php echo '<h4 style=" margin-top: 30px; font-weight: bold; font-family: Calibri; font-size: 28px">'.$nbreGarcons[0].'</h4>'; ?></div>
+        <div class="column" style="margin-right:10px; background-color:#1c83a3; color:#fff"><img style="float: right; margin-right: 7px; margin-top: 7px" src="<?php echo base_url(); ?>public/image/icons8-pièces-de-monnaie-85.png"><?php echo '<h4 style=" margin-top: 30px; font-weight: bold; font-family: Calibri; font-size: 28px">'.number_format($revenu[0], 0, ',', ' ').' FCFA</h4>'; ?></div>
     </div>
     <div style="margin-left: 160px;" class="row">
         <div class="column" style="margin-right:10px; height: 45px; background-color: #60943b; color: #fff"><h4 style="margin-top: 2px">Effectif garçons</h4></div>

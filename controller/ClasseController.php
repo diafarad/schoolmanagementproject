@@ -3,16 +3,22 @@
 require_once '../model/DB.php';
 require_once '../model/ClasseDB.php';
 
-    if(isset($_POST['valider']))
+    if(isset($_POST['lib']) && isset($_POST['niveau']) && isset($_POST['mont']) && isset($_POST['serie']) && isset($_POST['mens']))
     {
-        $ok = addClasse($_POST['lib'],$_POST['niveau'],$_POST['mont'],$_POST['serie']);
-        header("location:..?page=classe&resultA=$ok");
+        $ok = addClasse($_POST['lib'],$_POST['niveau'],$_POST['mont'],$_POST['serie'],$_POST['mens']);
+        if ($ok == 1)
+            echo "<div class='alert alert-success'><center>Classe ajoutée avec succès.</center></div>";
+        else
+            echo "<div class='alert alert-danger'><center>Une petite erreur est survenue.</br>Réessayer plutard.</center></div>";
     }
 
-    if(isset($_POST['enregistrer']))
+    if(isset($_POST['edit_id']) && isset($_POST['edit_libelle']) && isset($_POST['edit_niveau']) && isset($_POST['edit_montantIns']) && isset($_POST['edit_montantMens']) && isset($_POST['edit_serie']))
     {
-        $ok = updateClasse($_POST['id'],$_POST['libelle'],$_POST['niveau'],$_POST['montantIns'],$_POST['serie']);
-        header("location:..?page=classe&resultE=$ok");
+        $ok = updateClasse($_POST['edit_id'],$_POST['edit_libelle'],$_POST['edit_niveau'],$_POST['edit_montantIns'],$_POST['edit_serie'],$_POST['edit_montantMens']);
+        if ($ok == 1)
+            echo "<div class='alert alert-success'><center>Donnée(s) modifiée(s) avec succès.</center></div>";
+        else
+            echo "<div class='alert alert-danger'><center>Une petite erreur est survenue.</br>Réessayer plutard.</center></div>";
     }
 
     if(isset($_POST['supprimer']))

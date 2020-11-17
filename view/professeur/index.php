@@ -285,40 +285,34 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel"><center> Liste des élèves de la <span id="libcl"></span></center></h4>
+                <h4 class="modal-title" id="myModalLabel"><center> Liste des cours </center></h4>
             </div>
             <form class="form-inline" style="margin-top: 15px; margin-bottom: 15px">
                 <center>
                 <div class="form-group">
                     <label class="sr-only">Année académique</label>
                     <input type="text"  class="form-control" id="annee" placeholder="Entrer l'année académique">
-                    <input type="hidden"  class="form-control" id="classeinput" >
+                    <input type="hidden"  class="form-control" id="idprof" >
                 </div>
-                <button type="submit" class="btn btn-primary" id="lancer" name="lancer">Lancer</button>
+                <button type="button" class="btn btn-primary" id="lancer" name="lancer">Lancer</button>
                 </center>
             </form>
             <center>
-            <table id="resultClasse" class="table table-bordered table-striped" style="width:auto;">
+            <table id="resultCours" class="table table-bordered table-striped" style="width:auto;">
                 <thead>
                 <tr>
-                    <th style='text-align:center;'>Matricule</th>
-                    <th style='text-align:center;'>Prénom-s</th>
-                    <th style='text-align:center;'>Nom</th>
-                    <th style='text-align:center;'>Date de Naiss</th>
-                    <th style="text-align: center">Lieu de Naiss</th>
-                    <th style="text-align: center">Genre</th>
+                    <th style='text-align:center;'>Matière</th>
+                    <th style='text-align:center;'>Coef.</th>
+                    <th style='text-align:center;'>Classe</th>
                 </tr>
                 </thead>
                 <tbody>
                 </tbody>
                 <tfoot>
                 <tr>
-                    <th style='text-align:center;'>Matricule</th>
-                    <th style='text-align:center;'>Prénom-s</th>
-                    <th style='text-align:center;'>Nom</th>
-                    <th style='text-align:center;'>Date de Naiss</th>
-                    <th style="text-align: center">Lieu de Naiss</th>
-                    <th style="text-align: center">Genre </th>
+                    <th style='text-align:center;'>Matière</th>
+                    <th style='text-align:center;'>Coef.</th>
+                    <th style='text-align:center;'>Classe</th>
                 </tr>
                 </tfoot>
             </table>
@@ -356,21 +350,18 @@
 
     $(document).on( "click", '.details_classe',function(e) {
         var id = $(this).data('id');
-        $('#classeinput').val(id);
-        var lib = $(this).data('lib');
-        $("#libcl").text(lib);
-        $('#annee').val('');
-        $('#resultClasse > tbody').empty();
+        $('#idprof').val(id);
+        $('#resultCours > tbody').empty();
         $.ajax({
-            url: "<?php echo base_url();?>controller/ClasseController.php?classe_id="+id,
+            url: "<?php echo base_url();?>controller/CoursController.php?profid="+id,
             dataType: "text",
             success: function (data) {
-                $('#resultClasse > tbody').empty();
+                $('#resultCours > tbody').empty();
                 if(data){
-                    $('#resultClasse').append(data);
+                    $('#resultCours').append(data);
                 }
                 else {
-                    $('#resultClasse').append("<tr><td colspan='6'><center>Pas de résultat disponible !</center></td></tr>");
+                    $('#resultCours').append("<tr><td colspan='3'><center>Pas de résultat disponible !</center></td></tr>");
                 }
             },
             error: function (e) {
@@ -615,6 +606,34 @@
 
     });
 
+    $('#lancer').click(function () {
+        var ann = $('#annee').val();
+        var prof = $('#idprof').val();
+
+        $.ajax({
+            url: "<?php echo base_url(); ?>controller/CoursController.php?idp="+prof+"&an="+ann,
+            dataType: "text",
+            success: function(data) {
+                $('#resultCours > tbody').empty();
+                if(data){
+                    $('#resultCours').append(data);
+                }
+                else {
+                    $('#resultCours').append("<tr><td colspan='3'><center>Pas de résultat disponible !</center></td></tr>");
+                }
+            },
+            error: function (e) {
+                $('#action_alert').html('<center><div class="alert alert-danger"> Une petite erreur est survenue</div></center>');
+                $("#action_alert").dialog({
+                    modal: true,
+                    open: function(event, ui){
+                        setTimeout("$('#action_alert').dialog('close')",3000);
+                    }
+                });
+            }
+        });
+
+    });
 
 </script>
 

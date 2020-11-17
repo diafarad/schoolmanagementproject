@@ -16,8 +16,18 @@ if(isset($_GET['page']))
     switch ($_GET['page'])
     {
         case 'accueil':
-            $nbreClasses = getNombreClasse();
+            $nbreClasses = @getNombreClasse();
+            $nbreEleves = @getNombreEleve();
+            $nbreProfs = @getNombreProf();
+            $nbreGarcons = @getNombreGarcon();
+            $nbreFilles = @getNombreFille();
+            $revenu = @getRevenu();
             $nbreClasses = mysqli_fetch_row($nbreClasses);
+            $nbreEleves = mysqli_fetch_row($nbreEleves);
+            $nbreProfs = mysqli_fetch_row($nbreProfs);
+            $nbreGarcons = mysqli_fetch_row($nbreGarcons);
+            $nbreFilles = mysqli_fetch_row($nbreFilles);
+            $revenu = mysqli_fetch_row($revenu);
             require_once "view/accueil/index.php";
             break;
         case 'classe':
@@ -47,6 +57,9 @@ if(isset($_GET['page']))
             break;
         case 'note':
             require_once "view/note/index.php";
+            break;
+        case 'statistique':
+            require_once "view/statistique/index.php";
             break;
         case 'evaluation':
             $anneeencours = getAnneeEnCours();

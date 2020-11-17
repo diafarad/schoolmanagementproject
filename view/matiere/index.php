@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <title>Classe</title>
     <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>public/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="<?php echo base_url(); ?>public/jquery-ui-1.12.1/jquery-ui-1.12.1/jquery-ui.css"/>
     <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>public/Semantic-UI-CSS-master/semantic.min.css"/>
     <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>public/DataTables/DataTables-1.10.20/css/dataTables.semanticui.min.css"/>
     <script src="<?php echo base_url(); ?>public/js/jquery-3.3.1.js"></script>
-    <script src="<?php echo base_url(); ?>public/js/bootstrap-3.4.0.min.js"></script>
-    <script src="<?php echo base_url(); ?>public/jquery-ui-1.12.1/jquery-ui-1.12.1/jquery-ui.js"></script>
     <script src="<?php echo base_url(); ?>public/DataTables/DataTables-1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="<?php echo base_url(); ?>public/jquery-ui-1.12.1/jquery-ui-1.12.1/jquery-ui.js"></script>
     <script src="<?php echo base_url(); ?>public/DataTables/DataTables-1.10.20/js/dataTables.semanticui.min.js"></script>
     <script src="<?php echo base_url(); ?>public/Semantic-UI-CSS-master/semantic.min.js"></script>
     <script>
@@ -43,6 +41,7 @@
 
 <div class="container" style="margin-top: 50px; max-width: 750px">
     <div class="panel panel-info ">
+        <div id="info"></div>
         <div id="action_alertm" title="Message"></div>
         <div class="panel-heading" align="center">Listes des matières</div>
         <div class="panel-body">
@@ -103,7 +102,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="exampleModalLabel" align="center">Nouvelle matière</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" id="closeaddmatiere" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -128,19 +127,19 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Édition classe</h4>
+                <button type="button" id="closeeditmatiere" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Édition matière</h4>
             </div>
-            <form method="post" action="<?php echo base_url(); ?>controller/ClasseController.php">
+            <form method="post" id="edit_matiere">
                 <div class="modal-body">
                     <div class="form-group">
-                        <input class="form-control matiere_id" type="hidden" name="id" required>
+                        <input class="form-control matiere_id" type="hidden" name="matiere_id" required>
                         <label class="control-label">Libellé</label>
                         <input class="form-control matiere_libelle" name="libellem" placeholder="Entrer le libellé" required>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" id="enregistrerm" name="enregistrerm">Enregistrer</button>
+                    <button type="submit" class="btn btn-primary" name="enregistrerm">Enregistrer</button>
                 </div>
             </form>
         </div>
@@ -153,9 +152,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Suppression classe</h4>
+                <h4 class="modal-title" id="myModalLabel">Suppression matiere</h4>
             </div>
-            <form method="post" action="<?php echo base_url(); ?>controller/ClasseController.php">
+            <form method="post" id="delete_matiere">
                 <div class="modal-body">
                     <div class="form-group">
                         <h3>Voulez-vous vraiment supprimer?</h3>
@@ -171,42 +170,41 @@
 </div>
 
 <script>
+    document.getElementById('info').style.display = 'none';
+
     $(document).on( "click", '.edit_button',function(e) {
         var id = $(this).data('id');
         var lib = $(this).data('libelle');
-        var niveau = $(this).data('niveau');
-        var montantIns = $(this).data('montantins');
-        var serie = $(this).data('serie');
 
-        $(".classe_id").val(id);
-        $(".classe_libelle").val(lib);
-        $(".classe_montantIns").val(montantIns);
-        $(".classe_niveau").val(niveau);
-        $(".classe_serie").val(serie);
+        $(".matiere_id").val(id);
+        $(".matiere_libelle").val(lib);
         //tinyMCE.get('business_skill_content').setContent(content);
     });
 
-    $(document).on( "click", '.details_classe',function(e) {
-        var id = $(this).data('id');
-        $('#classeinput').val(id);
-        var lib = $(this).data('lib');
-        $("#libcl").text(lib);
-        $('#annee').val('');
-        $('#resultClasse > tbody').empty();
+    $('#edit_matiere').on('submit', function () {
+        event.preventDefault();
+        //var count_data = 0;
+        //alert($('#lib').val());
+        var form_data = $(this).serialize();
         $.ajax({
-            url: "<?php echo base_url();?>controller/ClasseController.php?classe_id="+id,
-            dataType: "text",
-            success: function (data) {
-                $('#resultClasse > tbody').empty();
-                if(data){
-                    $('#resultClasse').append(data);
-                }
-                else {
-                    $('#resultClasse').append("<tr><td colspan='6'><center>Pas de résultat disponible !</center></td></tr>");
-                }
+            url: "<?php echo base_url(); ?>controller/MatiereController.php",
+            method: "POST",
+            data: form_data,
+            success: function(data) {
+                //$('#edit_matiere')[0].reset();
+                $('#closeeditmatiere').click();
+                //$('body').removeClass('modal-open');
+                //$('.modal-backdrop').remove();
+                document.getElementById('info').style.display = 'block';
+                $('#info').html(data);
+                window.setTimeout(function() {
+                    $(".alert").fadeTo(700, 0).slideUp(700, function(){
+                        $(this).remove();
+                    });
+                }, 2000);
             },
-            error: function (e) {
-                showModalDialog("PAS BON");
+            error: function(data){
+                console.log('ERREUR : ' + data);
             }
         });
     });
@@ -245,26 +243,19 @@
                 dataType: "text",
                 success: function(data) {
                     //alert(data);
-                    $('#exampleModal').modal('hide');
-                    $('body').removeClass('modal-open');
-                    $('.modal-backdrop').remove();
-                    $('#action_alertm').html('<center><div class="alert alert-success">Matière ajoutée</div></center>');
-                    $("#action_alertm").dialog({
-                        modal: true,
-                        open: function(event, ui){
-                            setTimeout("$('#action_alert').dialog('close')",3000);
-                        }
-                    });
+                    $('#closeaddmatiere').click();
+                    //$('body').removeClass('modal-open');
+                    //$('.modal-backdrop').remove();
+                    document.getElementById('info').style.display = 'block';
+                    $('#info').html(data);
+                    window.setTimeout(function() {
+                        $(".alert").fadeTo(700, 0).slideUp(700, function(){
+                            $(this).remove();
+                        });
+                    }, 2000);
                 },
                 error: function (e) {
-                    //alert("Pas bon");
-                    $('#action_alertm').html('<center><div class="alert alert-danger"> Une petite erreur est survenue</div></center>');
-                    $("#action_alertm").dialog({
-                        modal: true,
-                        open: function(event, ui){
-                            setTimeout("$('#action_alert').dialog('close')",3000);
-                        }
-                    });
+                    console.log('ERREUR : ' + e);
                 }
             });
         }
