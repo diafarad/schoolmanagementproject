@@ -1,8 +1,8 @@
 <?php
 
-    function addProfesseur($mat,$nom,$prenom,$date,$lieu,$mail,$tel,$genre)
+    function addProfesseur($mat,$nom,$date,$lieu,$genre)
     {
-        $sql = "INSERT INTO professeur VALUES ('$mat', '$nom' , '$prenom', '$date', '$lieu', '$mail', '$tel', '$genre')";
+        $sql = "INSERT INTO professeur VALUES ('$mat', '$nom' , '$date', '$lieu', '$genre')";
         return executeSQL($sql);
     }
 
@@ -12,14 +12,11 @@
         return executeSQL($sql);
     }
 
-    function updateProfesseur($mat,$nom,$prenom,$date,$lieu,$mail,$tel,$sexe)
+    function updateProfesseur($mat,$nom,$date,$lieu,$sexe)
     {
         $sql = "UPDATE professeur p SET p.nom = '$nom',
-                                      p.prenom = '$prenom',
                                       p.date = '$date',
                                       p.lieu = '$lieu',
-                                      p.mail = '$mail',
-                                      p.tel = '$tel',
                                       p.genre = '$sexe'
                                       WHERE p.mat = '$mat'";
         return executeSQL($sql);

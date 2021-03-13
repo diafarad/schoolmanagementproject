@@ -15,7 +15,7 @@
     <script src="<?php echo base_url(); ?>public/Semantic-UI-CSS-master/semantic.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#example').DataTable( {
+            $('#example').DataTable({
                 "language": {
                     "lengthMenu": "Afficher _MENU_ lignes",
                     "zeroRecords": "Pas de correspondance",
@@ -30,7 +30,7 @@
                     "search":         "Rechercher:"
                 },
                 "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "Tout"]]
-            } );
+            });
         } );
     </script>
     <style>
@@ -52,13 +52,10 @@
             <table id="example" class="ui celled table" style="width:100%; padding-left: auto; ">
                 <thead>
                 <tr>
-                    <th style='text-align:center;'>Nom</th>
-                    <th style='text-align:center;'>Prénom-s</th>
+                    <th style='text-align:center;'>Nom complet</th>
                     <th style='text-align:center;'>Date de Naiss</th>
                     <th style="text-align: center">Lieu de Naiss</th>
                     <th style="text-align: center">Genre</th>
-                    <th style="text-align: center">Téléphone</th>
-                    <th style="text-align: center">Mail </th>
                     <th style="text-align: center">Action</th>
                     <th style="text-align: center">Action</th>
                     <th style="text-align: center">Action</th>
@@ -66,6 +63,42 @@
                 </thead>
                 <tbody>
                     <?php
+
+                    if(isset($_GET['resultA']))
+                    {
+                        if($_GET['resultA'] == 1)
+                        {
+                            echo "<div class='alert alert-success'> Données ajoutées</div>";
+                        }
+                        else
+                        {
+                            echo "<div class='alert alert-warning'> Erreur de code</div>";
+                        }
+                    }
+
+                    if(isset($_GET['resultE']))
+                    {
+                        if($_GET['resultE'] == 1)
+                        {
+                            echo "<div class='alert alert-success'> Données modifiées</div>";
+                        }
+                        else
+                        {
+                            echo "<div class='alert alert-warning'> Erreur de code</div>";
+                        }
+                    }
+
+                    if(isset($_GET['resultS']))
+                    {
+                        if($_GET['resultS'] == 1)
+                        {
+                            echo "<div class='alert alert-success'> Données supprimées</div>";
+                        }
+                        else
+                        {
+                            echo "<div class='alert alert-warning'> Erreur de code</div>";
+                        }
+                    }
 
                     while($result=mysqli_fetch_row($professeurs))
                     {
@@ -75,9 +108,6 @@
                                 <td style='text-align:center;'>$result[2]</td>
                                 <td style='text-align:center;'>$result[3]</td>
                                 <td style='text-align:center;'>$result[4]</td>
-                                <td style='text-align:center;'>$result[7]</td>
-                                <td style='text-align:center;'>$result[5]</td>
-                                <td style='text-align:center;'>$result[6]</td>
                                 <td><center><button type='button' class='btn btn-info btn-xs details_classe' 
                                         data-toggle='modal' data-target='#mydetailModal'
                                         data-id='$result[0]'
@@ -87,12 +117,9 @@
                                 <td><center><button type='button' class='btn btn-warning btn-xs edit_button' 
                                         data-toggle='modal' data-target='#myeditModal'
                                         data-nom='$result[1]'
-                                        data-prenom='$result[2]'
-                                        data-date='$result[3]'
-                                        data-lieu='$result[4]'
-                                        data-mail='$result[5]'
-                                        data-tel='$result[6]'
-                                        data-genre='$result[7]'
+                                        data-date='$result[2]'
+                                        data-lieu='$result[3]'
+                                        data-genre='$result[4]'
                                         data-mat='$result[0]'>
                                         Éditer
                                     </button>
@@ -112,13 +139,10 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                    <th style='text-align:center;'>Nom</th>
-                    <th style='text-align:center;'>Prénom-s</th>
+                    <th style='text-align:center;'>Nom complet</th>
                     <th style='text-align:center;'>Date de Naiss</th>
                     <th style="text-align: center">Lieu de Naiss</th>
                     <th style="text-align: center">Genre</th>
-                    <th style="text-align: center">Téléphone </th>
-                    <th style="text-align: center">Mail </th>
                     <th style="text-align: center">Action</th>
                     <th style="text-align: center">Action</th>
                     <th style="text-align: center">Action</th>
@@ -140,52 +164,33 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" id="form_addProf">
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label class="control-label">Prénom-s</label>
-                                <input type="text" class="form-control" id="prenom" name="prenom" placeholder="Entrer le-s prénom-s">
-                                <span id="err_prenom" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label class="control-label">Nom</label>
-                                <input type="text" class="form-control" id="nom" name="nom" placeholder="Entrer le nom">
-                                <span id="err_nom" class="text-danger"></span>
-                            </div>
+                <form method="post" action="<?php echo base_url(); ?>controller/ProfesseurController.php">
+                        <div class="form-group">
+                            <label class="control-label">Nom complet</label>
+                            <input type="text" class="form-control" id="nomp" name="nomp" placeholder="Entrer le nom complet">
+                            <span id="err_nom" class="text-danger"></span>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label class="control-label">Date de naissance</label>
-                                <input type="date" class="form-control" id="date" name="date" placeholder="Sélectionner la date">
-                                <span id="err_date" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label class="control-label">Lieu de naissance</label>
-                                <input type="text" class="form-control" id="lieu" name="lieu" placeholder="Entrer le lieu de naissance">
-                                <span id="err_lieu" class="text-danger"></span>
-                            </div>
+                        <div class="form-group">
+                            <label class="control-label">Date de naissance</label>
+                            <input type="date" class="form-control" id="date" name="datep" placeholder="Sélectionner la date">
+                            <span id="err_date" class="text-danger"></span>
                         </div>
-                        <div style="margin-left: 15px; margin-right: 15px" class="form-group">
-                            <label class="control-label">Email</label>
-                            <input class="form-control" type="text" name="mail" id="mail" placeholder="Entrer le mail"/>
-                            <span id="err_mail" class="text-danger"></span>
-                        </div>
-                        <div style="margin-left: 15px; margin-right: 15px" class="form-group">
-                            <label class="control-label">Téléphone</label>
-                            <input class="form-control" type="text" name="tel" id="tel" placeholder="Entrer le téléphone"/>
-                            <span id="err_tel" class="text-danger"></span>
+                        <div class="form-group">
+                            <label class="control-label">Lieu de naissance</label>
+                            <input type="text" class="form-control" id="lieu" name="lieup" placeholder="Entrer le lieu de naissance">
+                            <span id="err_lieu" class="text-danger"></span>
                         </div>
                         <div class="form-check form-check-inline" style="margin-left: 15px; margin-right: 15px">
                             <label class="control-label">Sexe :</label>
-                            <input class="form-check-input" style="margin-left: 30px" type="radio" name="sexe" id="sexem" value="m">
+                            <input class="form-check-input" style="margin-left: 30px" type="radio" name="sexep" id="sexem" value="m">
                             <label class="form-check-label" for="sexem">Masculin</label>
-                            <input class="form-check-input" style="margin-left: 80px" type="radio" name="sexe" id="sexef" value="f">
+                            <input class="form-check-input" style="margin-left: 80px" type="radio" name="sexep" id="sexef" value="f">
                             <label class="form-check-label" for="sexef">Féminin</label>
                         </div>
                         <span style="margin-left: 15px; margin-right: 15px" id="err_sexe" class="text-danger"></span>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="valider" name="valider">Valider</button>
+                        <button type="submit" class="btn btn-primary" id="validerp" name="valider">Valider</button>
                         <button type="reset" class="btn btn-danger">Annuler</button>
                     </div>
                 </form>
@@ -202,41 +207,22 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel" align="center">Édition Professeur</h4>
             </div>
-            <form method="post" id="form_editionprof">
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <input class="form-control prof_mat" type="hidden" id="matp" name="matp" required>
-                        <label class="control-label">Prénom-s</label>
-                        <input class="form-control prof_prenom" id="prenomp" name="prenomp" placeholder="Entrer le-s prénom-s" >
-                        <span id="err_prenomp" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="heading">Nom</label>
-                        <input class="form-control prof_nom" type="text" id="nomp" name="nomp">
-                        <span id="err_nomp" class="text-danger"></span>
-                    </div>
+            <form method="post" action="<?php echo base_url(); ?>controller/ProfesseurController.php">
+
+                <div class="form-group">
+                    <label for="heading">Nom complet</label>
+                    <input class="form-control prof_nom" type="text" id="nomp" name="nomp">
+                    <span id="err_nomp" class="text-danger"></span>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label class="control-label">Date Naiss</label>
-                        <input class="form-control prof_date" type="date" id="datep" name="datep" placeholder="Sélectionner la date de naiss" >
-                        <span id="err_datep" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="control-label">Lieu de Naiss</label>
-                        <input class="form-control prof_lieu" type="text" id="lieup" name="lieup" placeholder="Entrer le lieu de naiss" >
-                        <span id="err_lieup" class="text-danger"></span>
-                    </div>
+                <div class="form-group ">
+                    <label class="control-label">Date Naiss</label>
+                    <input class="form-control prof_date" type="date" id="datep" name="datep" placeholder="Sélectionner la date de naiss" >
+                    <span id="err_datep" class="text-danger"></span>
                 </div>
-                <div class="form-group" style="margin-right: 15px; margin-left: 15px">
-                    <label class="control-label">Mail</label>
-                    <input class="form-control prof_mail" type="text" id="mailp" name="mailp" placeholder="Entrer le mail" >
-                    <span id="err_mailp" class="text-danger"></span>
-                </div>
-                <div class="form-group" style="margin-right: 15px; margin-left: 15px">
-                    <label class="control-label">Téléphone</label>
-                    <input class="form-control prof_tel" type="text" id="telp" name="telp" placeholder="Entrer le téléphone" >
-                    <span id="err_telp" class="text-danger"></span>
+                <div class="form-group">
+                    <label class="control-label">Lieu de Naiss</label>
+                    <input class="form-control prof_lieu" type="text" id="lieup" name="lieup" placeholder="Entrer le lieu de naiss" >
+                    <span id="err_lieup" class="text-danger"></span>
                 </div>
                 <div class="form-group" style="margin-right: 15px; margin-left: 15px">
                     <div class="form-check form-check-inline">
@@ -249,7 +235,7 @@
                     <span id="err_sexep" class="text-danger"></span>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="enregistrerp" name="enregistrerp">Enregistrer</button>
+                    <button type="submit" class="btn btn-primary" id="enregistrerp" name="enregistrerp">Enregistrer</button>
                     <button type="reset" class="btn btn-danger">Annuler</button>
 
                 </div>
@@ -270,11 +256,11 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <h3>Voulez-vous vraiment supprimer?</h3>
-                        <input class="form-control del_id" type="hidden" name="id" required>
+                        <input class="form-control del_id" type="hidden" name="idp_del" required>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-warning" name="supprimer">Confirmer</button>
+                    <button type="submit" class="btn btn-warning" name="supprimerp">Confirmer</button>
                 </div>
             </form>
         </div>
@@ -326,20 +312,14 @@
     $(document).on( "click", '.edit_button',function(e) {
         var mat = $(this).data('mat');
         var nom = $(this).data('nom');
-        var prenom = $(this).data('prenom');
         var date = $(this).data('date');
         var lieu = $(this).data('lieu');
-        var mail = $(this).data('mail');
-        var tel = $(this).data('tel');
         var genre = $(this).data('genre');
 
         $(".prof_mat").val(mat);
         $(".prof_nom").val(nom);
-        $(".prof_prenom").val(prenom);
         $(".prof_date").val(date);
         $(".prof_lieu").val(lieu);
-        $(".prof_mail").val(mail);
-        $(".prof_tel").val(tel);
         if(genre == 'm'){
             $("#sexemas").prop( "checked", true );
         }
@@ -353,7 +333,7 @@
         $('#idprof').val(id);
         $('#resultCours > tbody').empty();
         $.ajax({
-            url: "<?php echo base_url();?>controller/CoursController.php?profid="+id,
+            url: "<?php echo base_url();?>controller/ProfesseurController.php?profid="+id,
             dataType: "text",
             success: function (data) {
                 $('#resultCours > tbody').empty();
@@ -376,7 +356,7 @@
         $(".del_id").val(id);
     });
 
-    $('#valider').click(function () {
+    /*$('#valider').click(function () {
         //event.preventDefault();
         var err_prenom = '';
         var err_nom = '';
@@ -459,7 +439,7 @@
         }else {
             var form_data = $('#form_addProf').serialize();
             $.ajax({
-                url: "<?php echo base_url(); ?>controller/ProfesseurController.php",
+                url: controller/ProfesseurController.php",
                 method: "POST",
                 data: form_data,
                 dataType: "text",
@@ -488,9 +468,9 @@
             });
         }
 
-    });
+    });*/
 
-    $('#enregistrerp').click(function () {
+    /*$('#enregistrerp').click(function () {
         //event.preventDefault();
         var err_prenom = '';
         var err_nom = '';
@@ -574,7 +554,7 @@
         }else {
             var form_data = $('#form_editionprof').serialize();
             $.ajax({
-                url: "<?php echo base_url(); ?>controller/ProfesseurController.php",
+                url: controller/ProfesseurController.php",
                 method: "POST",
                 data: form_data,
                 dataType: "text",
@@ -604,7 +584,7 @@
             });
         }
 
-    });
+    });*/
 
     $('#lancer').click(function () {
         var ann = $('#annee').val();

@@ -5,21 +5,21 @@ require_once '../model/MatiereDB.php';
 
 
     $ok = 0;
-    if(isset($_POST['libm'])){
+    if(isset($_POST['validerm'])){
         $lib = $_POST['libm'];
 
         $ok = addMatiere($lib);
-        if ($ok == 1)
-            echo "<div class='alert alert-success'><center>Matière ajoutée avec succès.</center></div>";
-        else
-            echo "<div class='alert alert-danger'><center>Une petite erreur est survenue.</br>Réessayer plutard.</center></div>";
+        header("location:..?page=matiere&resultA=$ok");
     }
 
-    if(isset($_POST['matiere_id']) && isset($_POST['libellem']))
+    if(isset($_POST['enregistrerm']))
     {
         $ok = updateMatiere($_POST['matiere_id'],$_POST['libellem']);
-        if ($ok == 1)
-            echo "<div class='alert alert-success'><center>Donnée(s) modifiée(s) avec succès.</center></div>";
-        else
-            echo "<div class='alert alert-danger'><center>Une petite erreur est survenue.</br>Réessayer plutard.</center></div>";
+        header("location:..?page=matiere&resultE=$ok");
+    }
+
+    if(isset($_POST['supprimerm']))
+    {
+        $ok = deleteMatiere($_POST['idm_del']);
+        header("location:..?page=matiere&resultS=$ok");
     }

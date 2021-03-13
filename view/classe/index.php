@@ -51,9 +51,8 @@
                 <thead>
                 <tr>
                     <th style='text-align:center;'>Libellé</th>
-                    <th style='text-align:center;'>Niveau</th>
                     <th style='text-align:center;'>Montant Inscription</th>
-                    <th style='text-align:center;'>Série</th>
+                    <th style='text-align:center;'>Mensualité</th>
                     <th style="text-align: center">Action </th>
                     <th style="text-align: center">Action </th>
                     <th style="text-align: center">Action </th>
@@ -62,7 +61,7 @@
                 <tbody>
                     <?php
 
-                    /*if(isset($_GET['resultA']))
+                    if(isset($_GET['resultA']))
                     {
                         if($_GET['resultA'] == 1)
                         {
@@ -96,7 +95,7 @@
                         {
                             echo "<div class='alert alert-warning'> Erreur de code</div>";
                         }
-                    }*/
+                    }
 
                     while($result=mysqli_fetch_row($classes))
                     {
@@ -105,7 +104,6 @@
                                 <td style='text-align:center;'>$result[1]</td>
                                 <td style='text-align:center;'>$result[2]</td>
                                 <td style='text-align:center;'>$result[3]</td>
-                                <td style='text-align:center;'>$result[4]</td>
                                 <td><center><button type='button' class='btn btn-info btn-xs details_classe' 
                                         data-toggle='modal' data-target='#mydetailModal'
                                         data-id='$result[0]'
@@ -115,10 +113,8 @@
                                 <td><center><button type='button' class='btn btn-warning btn-xs edit_button' 
                                         data-toggle='modal' data-target='#myeditModal'
                                         data-libelle='$result[1]'
-                                        data-niveau='$result[2]'
-                                        data-montantins='$result[3]'
-                                        data-montantmens='$result[5]'
-                                        data-serie='$result[4]'
+                                        data-montantins='$result[2]'
+                                        data-montantmens='$result[3]'
                                         data-id='$result[0]'>
                                         Éditer
                                     </button>
@@ -139,9 +135,8 @@
                 <tfoot>
                 <tr>
                     <th style='text-align:center;'>Libellé</th>
-                    <th style='text-align:center;'>Niveau</th>
                     <th style='text-align:center;'>Montant Inscription</th>
-                    <th style='text-align:center;'>Série</th>
+                    <th style='text-align:center;'>Mensualité</th>
                     <th style="text-align: center">Action </th>
                     <th style="text-align: center">Action </th>
                     <th style="text-align: center">Action </th>
@@ -163,14 +158,10 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" id="addClasse">
+                <form method="post" action="<?php echo base_url(); ?>controller/ClasseController.php">
                     <div class="form-group">
                         <label class="control-label">Libellé</label>
                         <input class="form-control" type="text" name="lib" id="lib" placeholder="Entrer le libellé"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Niveau</label>
-                        <input class="form-control" type="text" name="niveau" id="niveau" placeholder="Entrer le niveau"/>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Montant Inscription</label>
@@ -179,10 +170,6 @@
                     <div class="form-group">
                         <label class="control-label">Mensualité</label>
                         <input class="form-control" type="text" name="mens" id="mens" placeholder="Entrer le montant de la mensualité"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Série</label>
-                        <input class="form-control" type="text" name="serie" id="serie" placeholder="Entrer la série"/>
                     </div>
                     <div class="form-group">
                         <input class="btn btn-success" type="submit" name="valider" value="Ajouter"/>
@@ -201,7 +188,7 @@
                 <button type="button" id="edok" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">Édition classe</h4>
             </div>
-            <form method="post" id="editClasse">
+            <form method="post" action="<?php echo base_url(); ?>controller/ClasseController.php">
                 <div class="modal-body">
                     <div class="form-group">
                         <input class="form-control classe_id" type="hidden" name="edit_id" required>
@@ -209,20 +196,12 @@
                         <input class="form-control classe_libelle" name="edit_libelle" placeholder="Entrer le libellé" required>
                     </div>
                     <div class="form-group">
-                        <label for="heading">Niveau</label>
-                        <input class="form-control classe_niveau" type="text" name="edit_niveau" required>
-                    </div>
-                    <div class="form-group">
                         <label class="control-label">Montant Inscription</label>
                         <input class="form-control classe_montantIns" type="text" name="edit_montantIns" placeholder="Entrer le montant d'inscrption" required>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Montant Mensualité</label>
+                        <label class="control-label">Mensualité</label>
                         <input class="form-control classe_montantMens" type="text" name="edit_montantMens" placeholder="Entrer le montant de la mensualité" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Série</label>
-                        <input class="form-control classe_serie" name="edit_serie" placeholder="Entrer la serie" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -245,7 +224,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <h3>Voulez-vous vraiment supprimer?</h3>
-                        <input class="form-control del_id" type="hidden" name="id" required>
+                        <input class="form-control del_id" type="hidden" name="id_del" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -277,8 +256,7 @@
                 <thead>
                 <tr>
                     <th style='text-align:center;'>Matricule</th>
-                    <th style='text-align:center;'>Prénom-s</th>
-                    <th style='text-align:center;'>Nom</th>
+                    <th style='text-align:center;'>Nom complet</th>
                     <th style='text-align:center;'>Date de Naiss</th>
                     <th style="text-align: center">Lieu de Naiss</th>
                     <th style="text-align: center">Genre</th>
@@ -289,8 +267,7 @@
                 <tfoot>
                 <tr>
                     <th style='text-align:center;'>Matricule</th>
-                    <th style='text-align:center;'>Prénom-s</th>
-                    <th style='text-align:center;'>Nom</th>
+                    <th style='text-align:center;'>Nom complet</th>
                     <th style='text-align:center;'>Date de Naiss</th>
                     <th style="text-align: center">Lieu de Naiss</th>
                     <th style="text-align: center">Genre </th>
@@ -306,13 +283,13 @@
 <script>
     document.getElementById('info').style.display = 'none';
     //$('#clok').click();
-    $('#addClasse').on('submit', function () {
+    /*$('#addClasse').on('submit', function () {
         event.preventDefault();
         //var count_data = 0;
         //alert($('#lib').val());
         var form_data = $(this).serialize();
         $.ajax({
-            url: "<?php echo base_url(); ?>controller/ClasseController.php",
+            url: "controller/ClasseController.php",
             method: "POST",
             data: form_data,
             success: function(data) {
@@ -332,32 +309,28 @@
                 console.log('ERREUR : ' + data);
             }
         });
-    });
+    });*/
 
     $(document).on( "click", '.edit_button',function(e) {
         var id = $(this).data('id');
         var lib = $(this).data('libelle');
-        var niveau = $(this).data('niveau');
         var montantIns = $(this).data('montantins');
         var montantMens = $(this).data('montantmens');
-        var serie = $(this).data('serie');
 
         $(".classe_id").val(id);
         $(".classe_libelle").val(lib);
         $(".classe_montantIns").val(montantIns);
         $(".classe_montantMens").val(montantMens);
-        $(".classe_niveau").val(niveau);
-        $(".classe_serie").val(serie);
         //tinyMCE.get('business_skill_content').setContent(content);
     });
 
-    $('#editClasse').on('submit', function () {
+    /*$('#editClasse').on('submit', function () {
         event.preventDefault();
         //var count_data = 0;
         //alert($('#lib').val());
         var form_data = $(this).serialize();
         $.ajax({
-            url: "<?php echo base_url(); ?>controller/ClasseController.php",
+            url: "controller/ClasseController.php",
             method: "POST",
             data: form_data,
             success: function(data) {
@@ -377,7 +350,7 @@
                 console.log('ERREUR : ' + data);
             }
         });
-    });
+    });*/
 
     $(document).on( "click", '.details_classe',function(e) {
         var id = $(this).data('id');

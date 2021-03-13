@@ -59,6 +59,42 @@
                 <tbody>
                     <?php
 
+                    if(isset($_GET['resultA']))
+                    {
+                        if($_GET['resultA'] == 1)
+                        {
+                            echo "<div class='alert alert-success'> Données ajoutées</div>";
+                        }
+                        else
+                        {
+                            echo "<div class='alert alert-warning'> Erreur de code</div>";
+                        }
+                    }
+
+                    if(isset($_GET['resultE']))
+                    {
+                        if($_GET['resultE'] == 1)
+                        {
+                            echo "<div class='alert alert-success'> Données modifiées</div>";
+                        }
+                        else
+                        {
+                            echo "<div class='alert alert-warning'> Erreur de code</div>";
+                        }
+                    }
+
+                    if(isset($_GET['resultS']))
+                    {
+                        if($_GET['resultS'] == 1)
+                        {
+                            echo "<div class='alert alert-success'> Données supprimées</div>";
+                        }
+                        else
+                        {
+                            echo "<div class='alert alert-warning'> Erreur de code</div>";
+                        }
+                    }
+
                     while($result=mysqli_fetch_row($matieres))
                     {
                         echo "
@@ -107,7 +143,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" id="form_addmatiere">
+                <form method="post" action="<?php echo base_url(); ?>controller/MatiereController.php">
                     <div class="form-group">
                         <label class="control-label">Libellé</label>
                         <input class="form-control" type="text" name="libm" id="libm" placeholder="Entrer le libellé"/>
@@ -130,7 +166,7 @@
                 <button type="button" id="closeeditmatiere" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">Édition matière</h4>
             </div>
-            <form method="post" id="edit_matiere">
+            <form method="post" action="<?php echo base_url(); ?>controller/MatiereController.php">
                 <div class="modal-body">
                     <div class="form-group">
                         <input class="form-control matiere_id" type="hidden" name="matiere_id" required>
@@ -154,15 +190,15 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">Suppression matiere</h4>
             </div>
-            <form method="post" id="delete_matiere">
+            <form method="post" action="<?php echo base_url(); ?>controller/MatiereController.php">
                 <div class="modal-body">
                     <div class="form-group">
                         <h3>Voulez-vous vraiment supprimer?</h3>
-                        <input class="form-control del_id" type="hidden" name="id" required>
+                        <input class="form-control del_id" type="hidden" name="idm_del" required>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-warning" name="supprimer">Confirmer</button>
+                    <button type="submit" class="btn btn-warning" name="supprimerm">Confirmer</button>
                 </div>
             </form>
         </div>
@@ -181,13 +217,13 @@
         //tinyMCE.get('business_skill_content').setContent(content);
     });
 
-    $('#edit_matiere').on('submit', function () {
+    /*$('#edit_matiere').on('submit', function () {
         event.preventDefault();
         //var count_data = 0;
         //alert($('#lib').val());
         var form_data = $(this).serialize();
         $.ajax({
-            url: "<?php echo base_url(); ?>controller/MatiereController.php",
+            url: "controller/MatiereController.php",
             method: "POST",
             data: form_data,
             success: function(data) {
@@ -207,7 +243,7 @@
                 console.log('ERREUR : ' + data);
             }
         });
-    });
+    });*/
 
     $(document).on( "click", '.del_button',function(e) {
         var id = $(this).data('id');
@@ -215,7 +251,7 @@
         $(".del_id").val(id);
     });
 
-    $('#validerm').click(function () {
+    /*$('#validerm').click(function () {
         //event.preventDefault();
         var err_libelle = '';
         var libelle = '';
@@ -237,7 +273,7 @@
         }else {
             var form_data = $('#form_addmatiere').serialize();
             $.ajax({
-                url: "<?php echo base_url(); ?>controller/MatiereController.php",
+                url: controller/MatiereController.php",
                 method: "POST",
                 data: form_data,
                 dataType: "text",
@@ -260,7 +296,7 @@
             });
         }
 
-    });
+    });*/
 
 
 </script>

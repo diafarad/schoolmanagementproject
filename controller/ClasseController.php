@@ -3,27 +3,22 @@
 require_once '../model/DB.php';
 require_once '../model/ClasseDB.php';
 
-    if(isset($_POST['lib']) && isset($_POST['niveau']) && isset($_POST['mont']) && isset($_POST['serie']) && isset($_POST['mens']))
+
+    if(isset($_POST['valider']))
     {
-        $ok = addClasse($_POST['lib'],$_POST['niveau'],$_POST['mont'],$_POST['serie'],$_POST['mens']);
-        if ($ok == 1)
-            echo "<div class='alert alert-success'><center>Classe ajoutée avec succès.</center></div>";
-        else
-            echo "<div class='alert alert-danger'><center>Une petite erreur est survenue.</br>Réessayer plutard.</center></div>";
+        $ok = addClasse($_POST['lib'],$_POST['mont'],$_POST['mens']);
+        header("location:..?page=classe&resultA=$ok");
     }
 
-    if(isset($_POST['edit_id']) && isset($_POST['edit_libelle']) && isset($_POST['edit_niveau']) && isset($_POST['edit_montantIns']) && isset($_POST['edit_montantMens']) && isset($_POST['edit_serie']))
+    if(isset($_POST['enregistrer']))
     {
-        $ok = updateClasse($_POST['edit_id'],$_POST['edit_libelle'],$_POST['edit_niveau'],$_POST['edit_montantIns'],$_POST['edit_serie'],$_POST['edit_montantMens']);
-        if ($ok == 1)
-            echo "<div class='alert alert-success'><center>Donnée(s) modifiée(s) avec succès.</center></div>";
-        else
-            echo "<div class='alert alert-danger'><center>Une petite erreur est survenue.</br>Réessayer plutard.</center></div>";
+        $ok = updateClasse($_POST['edit_id'],$_POST['edit_libelle'],$_POST['edit_montantIns'],$_POST['edit_montantMens']);
+        header("location:..?page=classe&resultE=$ok");
     }
 
     if(isset($_POST['supprimer']))
     {
-        $ok = deleteClasse($_POST['id']);
+        $ok = deleteClasse($_POST['id_del']);
         header("location:..?page=classe&resultS=$ok");
     }
 
@@ -50,11 +45,10 @@ require_once '../model/ClasseDB.php';
         {
             $output .= '<tr>';
             $output .= '<td style="text-align:center;">'.$res[0].'</td>';
-            $output .= '<td style="text-align:center;">'.$res[2].'</td>';
             $output .= '<td style="text-align:center;">'.$res[1].'</td>';
+            $output .= '<td style="text-align:center;">'.$res[2].'</td>';
             $output .= '<td style="text-align:center;">'.$res[3].'</td>';
             $output .= '<td style="text-align:center;">'.$res[4].'</td>';
-            $output .= '<td style="text-align:center;">'.$res[7].'</td>';
             $output .= '</tr>';
         }
         echo $output;
@@ -75,11 +69,10 @@ require_once '../model/ClasseDB.php';
         {
             $output .= '<tr>';
             $output .= '<td style="text-align:center;">'.$res[0].'</td>';
-            $output .= '<td style="text-align:center;">'.$res[2].'</td>';
             $output .= '<td style="text-align:center;">'.$res[1].'</td>';
+            $output .= '<td style="text-align:center;">'.$res[2].'</td>';
             $output .= '<td style="text-align:center;">'.$res[3].'</td>';
             $output .= '<td style="text-align:center;">'.$res[4].'</td>';
-            $output .= '<td style="text-align:center;">'.$res[7].'</td>';
             $output .= '</tr>';
         }
         echo $output;

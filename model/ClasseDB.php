@@ -1,8 +1,8 @@
 <?php
 
-    function addClasse($libelle,$niveau,$montantIns,$serie,$mensualite)
+    function addClasse($libelle,$montantIns,$mensualite)
     {
-        $sql = "INSERT INTO classe VALUES (NULL, '$libelle' , '$niveau', '$montantIns', '$serie','$mensualite')";
+        $sql = "INSERT INTO classe VALUES (NULL, '$libelle' , '$montantIns', '$mensualite')";
         return executeSQL($sql);
     }
 
@@ -12,12 +12,10 @@
         return executeSQL($sql);
     }
 
-    function updateClasse($id,$libelle,$niveau,$montantIns,$serie,$montantMens)
+    function updateClasse($id,$libelle,$montantIns,$montantMens)
     {
         $sql = "UPDATE classe SET libelle = '$libelle',
-                                  niveau = '$niveau',
                                   montantInscription = '$montantIns',
-                                  serie = '$serie',
                                   mensualite = '$montantMens'
                                   WHERE id = $id";
         return executeSQL($sql);

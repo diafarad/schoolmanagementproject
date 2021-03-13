@@ -4,14 +4,11 @@ require_once '../model/DB.php';
 require_once '../model/ProfesseurDB.php';
 
     $ok = 0;
-    if(isset($_POST['prenom']) && isset($_POST['nom']) && isset($_POST['date']) && isset($_POST['lieu']) && isset($_POST['mail']) && isset($_POST['tel']) && isset($_POST['sexe'])){
-        $nom = $_POST['nom'];
-        $prenom = $_POST['prenom'];
-        $dateNaiss = $_POST['date'];
-        $lieu = $_POST['lieu'];
-        $mail = $_POST['mail'];
-        $tel = $_POST['tel'];
-        $sexe = $_POST['sexe'];
+    if(isset($_POST['validerp'])){
+        $nom = $_POST['nomp'];
+        $dateNaiss = $_POST['datep'];
+        $lieu = $_POST['lieup'];
+        $sexe = $_POST['sexep'];
 
         $con = getConnection();
         if (!$con) {
@@ -25,18 +22,15 @@ require_once '../model/ProfesseurDB.php';
         $year=substr($dateNaiss,0,4);
         $mat = 'pf_'.$year.$increment; // pf_19865
 
-        $ok = addProfesseur($mat,$nom,$prenom,$dateNaiss,$lieu,$mail,$tel,$sexe);
-        return $ok;
+        $ok = addProfesseur($mat,$nom,$dateNaiss,$lieu,$sexe);
+        header("location:..?page=professeur&resultA=$ok");
     }
 
     $oki = 0;
-    if(isset($_POST['prenomp']) && isset($_POST['nomp']) && isset($_POST['datep']) && isset($_POST['lieup']) && isset($_POST['mailp']) && isset($_POST['telp']) && isset($_POST['sexep']) && isset($_POST['matp'])){
+    if(isset($_POST['enregistrerp'])){
         $nom = $_POST['nomp'];
-        $prenom = $_POST['prenomp'];
         $dateNaiss = $_POST['datep'];
         $lieu = $_POST['lieup'];
-        $mail = $_POST['mailp'];
-        $tel = $_POST['telp'];
         $sexe = $_POST['sexep'];
         $mat = $_POST['matp'];
 
@@ -45,6 +39,33 @@ require_once '../model/ProfesseurDB.php';
             die("Connection failed: " . mysqli_connect_error());
         }
 
-        $oki = updateProfesseur($mat,$nom,$prenom,$dateNaiss,$lieu,$mail,$tel,$sexe);
-        return $oki;
+        $oki = updateProfesseur($mat,$nom,$dateNaiss,$lieu,$sexe);
+        header("location:..?page=professeur&resultE=$ok");
+    }
+
+    if(isset($_POST['supprimerp']))
+    {
+        $ok = deleteClasse($_POST['idp_del']);
+        header("location:..?page=professeur&resultS=$ok");
+    }
+
+    if (isset($_GET['profid'])){
+        $conn = getConnection();
+        $an = getAnneeEnCours();
+        $prof = $_GET['profid'];
+
+        $query ="SELECT m.libelle,c.coef,cl.libelle FROM cours c, matiere m, classe cl
+                        WHERE c.matiere=m.id AND c.classe=cl.id AND c.anneeAcad='$an' AND c.professeur='$prof'";
+
+        $result = mysqli_query($conn,$query);
+        $output = '';
+        while($res = mysqli_fetch_array($result)){
+            $output .= '<tr>';
+            $output .= '<td style="text-align:center;">'.$res[0].'</td>';
+            $output .= '<td style="text-align:center;">'.$res[1].'</td>';
+            $output .= '<td style="text-align:center;">'.$res[2].'</td>';
+            $output .= '</tr>';
+        }
+
+        echo $output;
     }

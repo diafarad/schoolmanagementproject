@@ -1,8 +1,8 @@
 <?php
 
-    function addCours($coef,$matiere,$prof,$classe)
+    function addCours($coef,$matiere,$prof,$classe,$an)
     {
-        $sql = "INSERT INTO cours VALUES (NULL, '$coef' , '$matiere', '$prof', '$classe')";
+        $sql = "INSERT INTO cours VALUES (NULL, '$coef' , '$matiere', '$prof', '$classe','$an')";
         return executeSQL($sql);
     }
 

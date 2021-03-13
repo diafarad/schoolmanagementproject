@@ -216,8 +216,6 @@ $pdf->Ln(-10);
 $pdf->SetX(152);
 $pdf->Cell(45,10,$appreciation,'',1,'C',false);
 
-
-
 $pdf->SetY(-60); // Line gap
 $pdf->SetFont('Times','B',10);
 $pdf->SetX(12); // abscissa of Horizontal position

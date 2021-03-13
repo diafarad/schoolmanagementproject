@@ -5,7 +5,7 @@
         define("HOST", "localhost");
         define("USER", "root");
         define("PASSWORD", "");
-        define("DBNAME","DB_School");
+        define("DBNAME","db_ecole");
 
         $conn = mysqli_connect(HOST,USER,PASSWORD,DBNAME);
         mysqli_set_charset($conn,"utf8");

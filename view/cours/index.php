@@ -47,8 +47,7 @@
             <table id="example" class="ui celled table" style="width:100%; padding-left: auto; ">
                 <thead>
                 <tr>
-                    <th style='text-align:center;'>Libellé</th>
-                    <th style='text-align:center;'>Niveau</th>
+                    <th style='text-align:center;'>Classe</th>
                     <th style="text-align: center">Action </th>
                     <th style="text-align: center">Action </th>
                 </tr>
@@ -56,12 +55,47 @@
                 <tbody>
                 <?php
 
+                if(isset($_GET['resultA']))
+                {
+                    if($_GET['resultA'] == 1)
+                    {
+                        echo "<div class='alert alert-success'> Données ajoutées</div>";
+                    }
+                    else
+                    {
+                        echo "<div class='alert alert-danger'> Erreur de code</div>";
+                    }
+                }
+
+                if(isset($_GET['resultE']))
+                {
+                    if($_GET['resultE'] == 1)
+                    {
+                        echo "<div class='alert alert-success'> Données modifiées</div>";
+                    }
+                    else
+                    {
+                        echo "<div class='alert alert-danger'> Erreur de code</div>";
+                    }
+                }
+
+                if(isset($_GET['resultS']))
+                {
+                    if($_GET['resultS'] == 1)
+                    {
+                        echo "<div class='alert alert-success'> Données supprimées</div>";
+                    }
+                    else
+                    {
+                        echo "<div class='alert alert-danger'> Erreur de code</div>";
+                    }
+                }
+
                 while($result=mysqli_fetch_row($classes))
                 {
                     echo "
                             <tr>
                                 <td style='text-align:center;'>$result[1]</td>
-                                <td style='text-align:center;'>$result[2]</td>
                                 <td><center><button type='button' class='btn btn-primary btn-xs add_cours_classe' 
                                         data-toggle='modal' data-target='#myaddModal'
                                         data-idcl='$result[0]'
@@ -83,8 +117,7 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                    <th style='text-align:center;'>Libellé</th>
-                    <th style='text-align:center;'>Niveau</th>
+                    <th style='text-align:center;'>Classe</th>
                     <th style="text-align: center">Action </th>
                     <th style="text-align: center">Action </th>
                 </tr>
@@ -107,7 +140,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" id="form_addcours">
+                <form method="post" action="<?php echo base_url(); ?>controller/CoursController.php">
                         <div class="form-group">
                             <label class="control-label">Matière</label>
                             <select class='selectpicker show-menu-arrow form-control' type="text" name="matiere" id="matiere">
@@ -133,7 +166,7 @@
                                 $list = listeProfesseur();
                                 while($row = mysqli_fetch_row($list)){
                                     ?>
-                                    <option value="<?php echo $row[0];?>"> <?php echo $row[1].' '.$row[2];?> </option>
+                                    <option value="<?php echo $row[0];?>"> <?php echo $row[1];?> </option>
                                 <?php } ?>
                             </select>
                             <span id="err_prof" class="text-danger"></span>
@@ -167,25 +200,25 @@
                         <input type="text"  class="form-control" id="annee" placeholder="<?php echo ''.getAnneeEnCours(); ?>">
                         <input type="hidden"  class="form-control" id="classeinput" >
                     </div>
-                    <button type="submit" class="btn btn-primary" id="lancer" name="lancer">Lancer</button>
+                    <button type="button" class="btn btn-primary" id="lancer" name="lancer">Lancer</button>
                 </center>
             </form>
             <center>
                 <table id="resultCours" class="table table-bordered table-striped" style="margin-left: 15px; width: auto; margin-right: 15px">
                     <thead>
                     <tr>
-                        <th style='text-align:center;'>Libellé</th>
-                        <th style='text-align:center;'>Nombre d'heures</th>
+                        <th style='text-align:center;'>Matière</th>
                         <th style='text-align:center;'>Coefficient</th>
+                        <th style='text-align:center;'>Professeur</th>
                     </tr>
                     </thead>
                     <tbody>
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th style='text-align:center;'>Libellé</th>
-                        <th style='text-align:center;'>Nombre d'heures</th>
+                        <th style='text-align:center;'>Matière</th>
                         <th style='text-align:center;'>Coefficient</th>
+                        <th style='text-align:center;'>Professeur</th>
                     </tr>
                     </tfoot>
                 </table>
@@ -206,7 +239,7 @@
         //tinyMCE.get('business_skill_content').setContent(content);
     });
 
-    $('#form_addcours').on('submit', function () {
+    /*$('#form_addcours').on('submit', function () {
         event.preventDefault();
         var mat = $('#matiere').val();
         var coef = $('#coef').val();
@@ -215,7 +248,7 @@
 
         //alert('Matiere : '+mat+' Coef : '+coef+' Prof : '+prof+' Classe : '+classe);
         $.ajax({
-            url: "<?php echo base_url(); ?>controller/CoursController.php",
+            url: controller/CoursController.php",
             method: "POST",
             data: {
                 mat : mat,
@@ -246,7 +279,7 @@
                 });
             }
         });
-    });
+    });*/
 
 
     $(document).on( "click", '.details_classe',function(e) {
@@ -257,15 +290,15 @@
         $('#annee').val('');
         $('#resultClasse > tbody').empty();
         $.ajax({
-            url: "<?php echo base_url();?>controller/ClasseController.php?classe_id="+id,
+            url: "<?php echo base_url();?>controller/CoursController.php?classe_id="+id,
             dataType: "text",
             success: function (data) {
-                $('#resultClasse > tbody').empty();
+                $('#resultCours > tbody').empty();
                 if(data){
-                    $('#resultClasse').append(data);
+                    $('#resultCours').append(data);
                 }
                 else {
-                    $('#resultClasse').append("<tr><td colspan='6'><center>Pas de résultat disponible !</center></td></tr>");
+                    $('#resultCours').append("<tr><td colspan='3'><center>Pas de résultat disponible !</center></td></tr>");
                 }
             },
             error: function (e) {
@@ -277,7 +310,7 @@
     $(document).ready(function () {
         $('#lancer').click(function () {
             $.ajax({
-                url: "<?php echo base_url(); ?>controller/ClasseController.php",
+                url: "<?php echo base_url(); ?>controller/CoursController.php",
                 method: "POST",
                 data: {
                     annee : $('#annee').val(),
@@ -286,12 +319,12 @@
                 dataType: "text",
                 success: function(data) {
                     //alert(data);
-                    $('#resultClasse > tbody').empty();
+                    $('#resultCours > tbody').empty();
                     if(data){
-                        $('#resultClasse').append(data);
+                        $('#resultCours').append(data);
                     }
                     else {
-                        $('#resultClasse').append("<tr><td colspan='6'><center>Pas de résultat disponible !</center></td></tr>");
+                        $('#resultCours').append("<tr><td colspan='6'><center>Pas de résultat disponible !</center></td></tr>");
                     }
                 },
                 error: function (e) {

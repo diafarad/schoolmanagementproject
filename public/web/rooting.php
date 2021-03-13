@@ -2,7 +2,7 @@
 
 function base_url()
 {
-    return "http://localhost/schoolproject/";
+    return "http://localhost/projectecole/";
 }
 
 ?>
